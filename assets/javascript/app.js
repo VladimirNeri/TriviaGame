@@ -73,3 +73,29 @@ var arrayOfQuestions = [
   }
 
 ];
+
+function startGame() {
+    stop();
+    $('#contentArea').html('');
+    var startbutton = $("<div><button id='startbutton'>Start</button></div>");
+    $("#contentArea").append(startbutton);
+    $(startbutton).on("click", function() {
+  });
+}
+
+startGame();
+//clears intervalid
+function stop() {
+    clearInterval(intervalId);
+  }
+  
+  //sets the time interval for 15 seconds
+  function run() {
+    timeLeft = 120;
+    intervalId = setInterval(decrement, 1000);
+    console.log(intervalId);
+  }
+
+
+// Still need to work on creating the multiple choice questions from the Questions array. 
+// Still need to work on the correct/incorrect and unanswered counters.    
