@@ -150,9 +150,6 @@ function questionGenerator(questionObj) {
 
     var questionDiv = $("<div id='question'></div>");
 
-  // var questionArray = [];
-  // questionContainer.append(questionArray);
-
     questionDiv.html("<h4>" + question + "</h4>");
     questionContainer.append(questionDiv);
   
@@ -165,11 +162,6 @@ function questionGenerator(questionObj) {
     sort.sort(function() { return 0.5 - Math.random() });
     questionContainer.append(sort);
     console.log(sort);
-    // for (var i = 1; i < choices.length; i++) {
-    //     questionContainer.append("<p class='answer'><button>" + choices[i] + "</button></p>");
-    // }
-    // questionContainer.append("<p id='correct'><button>" + choices[0] + "</button></p>");
-
     return questionContainer;
 
 };
