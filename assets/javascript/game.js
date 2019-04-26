@@ -1,4 +1,5 @@
 
+
 // Variables for timer
 var intervalId;
 var timeLeft;
@@ -73,28 +74,142 @@ var arrayOfQuestions = [
 
 ];
 
+//Starts Game 
 function startGame() {
     stop();
     $('#contentArea').html('');
     var startbutton = $("<div><button id='startbutton'>Start</button></div>");
     $("#contentArea").append(startbutton);
     $(startbutton).on("click", function() {
+      question();
   });
 }
 
 startGame();
+
 //clears intervalid
 function stop() {
-    clearInterval(intervalId);
+  clearInterval(intervalId);
+}
+
+//sets the time interval for 15 seconds
+function run() {
+  timeLeft = 15;
+  intervalId = setInterval(decrement, 1000);
+  console.log(intervalId);
+}
+
+//Decreases number by one and shows the number in timer tag
+function decrement() {
+    timeLeft--;
+    $("#timer").html("<h3>Time Left: " + timeLeft + "</h3>");
+    if (timeLeft === 0) {
+        stop();
+        unansweredScreen(arrayOfQuestions[questionCounter]);
+        unansweredCounter++;
+        questionCounter++;
+    }
+};
+
+    $("#contentArea").on("click", ".answer", function() {
+        console.log("Incorrect!");
+        incorrectAnswerCounter++;
+        incorrectScreen(arrayOfQuestions[questionCounter]);
+        questionCounter++;
+    })
+
+    $("#contentArea").on("click", "#correct", function() {
+        console.log("Correct!");
+        correctAnswerCounter++;
+        correctScreen();
+        questionCounter++;
+    })
+
+function question() {
+    if (questionCounter >= arrayOfQuestions.length) {
+        results();
+        questionCounter = 0
+  } else {
+      var newquestion = questionGenerator(arrayOfQuestions[questionCounter]);
+      $('#contentArea').html('');
+      $('#contentArea').append(newquestion);
+      run();
   }
+}
+
+function questionGenerator(questionObj) {
+    var question = questionObj.question;
+    var choices = questionObj.choices;
+
+  // Delete all of the content in the area//
+
+    console.log("Content deleted");
+    var questionContainer = $("<div id='q-container'>")
+
+  // Place content for Question One below//
+
+    var questionDiv = $("<div id='question'></div>");
+
+    questionDiv.html("<h4>" + question + "</h4>");
+    questionContainer.append(questionDiv);
   
-  //sets the time interval for 15 seconds
-  function run() {
-    timeLeft = 120;
-    intervalId = setInterval(decrement, 1000);
-    console.log(intervalId);
+    var sort = [];
+    for (var i = 1; i < choices.length; i++) {
+       sort.push("<p class='answer'><button>" + choices[i] + "</button></p>")     
+    }
+    
+    sort.push("<p id='correct'><button>" + choices[0] + "</button></p>");
+    sort.sort(function() { return 0.5 - Math.random() });
+    questionContainer.append(sort);
+    console.log(sort);
+    return questionContainer;
+
+};
+
+function results() {
+
+  stop();
+  $('#contentArea').html('');
+    var resultsUnanswered = '<h4 class="results"">Number of unanswered questions: ' + unansweredCounter + '</h4>';
+    var resultsCorrect = '<h5 class="results">Number of correct answers: ' + correctAnswerCounter + '</h5>';
+    var resultsIncorrect = '<h6 class="results">Number of incorrect answers: ' + incorrectAnswerCounter + '</h6>';
+  
+      $("#contentArea").append(resultsCorrect);
+      $("#contentArea").append(resultsIncorrect);
+      $("#contentArea").append(resultsUnanswered);
+  
+  var restartButton = $("<div><button id='restartButton'>Restart</button></div>");
+  
+      $("#contentArea").append(restartButton);
+
+  $(restartButton).on("click", function() {
+      console.log("hi");
+      //Run question 1
+      correctAnswerCounter = 0;
+      incorrectAnswerCounter = 0;
+      unansweredCounter = 0;
+      question();
+      })
   }
 
+function correctScreen() {
+    stop();
+    $('#show_timer').html(" ");
+    $('#contentArea').html("<p class='screens'>That answer is correct!</p>");
+    setTimeout(question, 3000);
+}
 
-// Still need to work on creating the multiple choice questions from the Questions array. 
-// Still need to work on the correct/incorrect and unanswered counters.    
+function incorrectScreen(quesObj) {
+    stop();
+    $('#show_timer').html(" ");
+    $('#contentArea').html("<p class='screens'>That answer is incorrect! The correct answer is: " + quesObj.answer + "</p>");
+    setTimeout(question, 3000);
+}
+
+function unansweredScreen(questObj) {
+    stop();
+    $('#show_timer').html(" ");
+    $('#contentArea').html("<p class='screens'>No answer chosen! The correct answer is: " + questObj.answer + "</p>");
+      setTimeout(question, 3000);
+}
+
