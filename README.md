@@ -24,3 +24,5 @@ In this assignment, You'll create a Trivia game using JavaScript for the logic a
 - HTML
 - CSS
 - Bootstrap
+
+### Live Site - https://vladimirneri.github.io/TriviaGame/
